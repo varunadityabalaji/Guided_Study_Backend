@@ -130,8 +130,6 @@ def predict(ticker):
     # Fitting the ANN to the Training set
     history = model.fit(X_train, y_train ,batch_size = 10, validation_data = (X_test, y_test), epochs = 15, verbose=1)
 
-    time.sleep(15)
-
     scaled_data = scaler_x.transform(today_data)
     scaled_data = pca.fit_transform(scaled_data)
     scaled_data = np.expand_dims(scaled_data, axis=1)
