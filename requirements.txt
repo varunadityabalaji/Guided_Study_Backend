@@ -56,7 +56,6 @@ Werkzeug==2.1.2
 wrapt==1.14.1
 yfinance==0.1.74
 zipp==3.8.1
-keras==2.8.0
 matplotlib==3.5.1
 numpy==1.21.2
 pandas==1.3.5
