@@ -27,39 +27,37 @@ from sklearn.model_selection import train_test_split
 from sklearn.decomposition import PCA
 import joblib 
 
-# def get_sentiment_data(ticker_symbol,df):
-#     dates = df['Date']
-#     dates = dates.apply(lambda x: datetime.strptime(str(x), '%Y-%m-%d %H:%M:%S').strftime("%Y-%m-%d"))
-#     sentiment_values = []
+def get_sentiment_data(ticker_symbol,df):
+    dates = df['Date']
+    dates = dates.apply(lambda x: datetime.strptime(str(x), '%Y-%m-%d %H:%M:%S').strftime("%Y-%m-%d"))
+    sentiment_values = []
 
-#     for m in dates:        
-#         #the request is put in a try catch block to stop the loop from breaking
-#         try:
-#             #initiate the connection to the 3rd party api service
-#             conn = http.client.HTTPSConnection('api.marketaux.com') 
-#             params = urllib.parse.urlencode({
-#                 'api_token': 'fkkywOjEYioULrZrV9pt21k6pTtRPW5C17FeWNkE',
-#                 'symbols': ticker_symbol,
-#                 'published_on':m
-#                 })
+    for m in dates:        
+        #the request is put in a try catch block to stop the loop from breaking
+        try:
+            #initiate the connection to the 3rd party api service
+            conn = http.client.HTTPSConnection('api.marketaux.com') 
+            params = urllib.parse.urlencode({
+                'api_token': 'fkkywOjEYioULrZrV9pt21k6pTtRPW5C17FeWNkE',
+                'symbols': ticker_symbol,
+                'published_on':m
+                })
 
-#             conn.request('GET', '/v1/entity/stats/aggregation?{}'.format(params))
-#             res = conn.getresponse()
-#             data = res.read()
-#             parsed = json.loads(data)
-#             sentiment_values.append(parsed['data'][0]['sentiment_avg'])
-#             print(m)
-#         except Exception as e:
-#             return 'error'      
-#         time.sleep(1)
+            conn.request('GET', '/v1/entity/stats/aggregation?{}'.format(params))
+            res = conn.getresponse()
+            data = res.read()
+            parsed = json.loads(data)
+            sentiment_values.append(parsed['data'][0]['sentiment_avg'])
+        except Exception as e:
+            return 'error'      
         
-#     return sentiment_values
+    return sentiment_values
 
 
 def predict(ticker):
     response = {'status':'success'}
     indicators = ['High','Low','Open','Volume','Adj Close','H-L','O-C','5MA',
-              '10MA','20MA','7SD','EMA8','EMA21','EMA34','EMA55','RSI_14']
+              '10MA','20MA','7SD','EMA8','EMA21','EMA34','EMA55','RSI_14','Sentiment']
     
     end_date = datetime.today().strftime('%Y-%m-%d')
     start_date = (datetime.today() - relativedelta(months=+4)).strftime('%Y-%m-%d')
@@ -81,13 +79,13 @@ def predict(ticker):
     df.ta.rsi(close='Close', length=14, append=True)
     df['Close'] = df['Close'].shift(-1)
     df = df.reset_index()
-    # sentiment_values =get_sentiment_data(ticker,df)
+    sentiment_values =get_sentiment_data(ticker,df)
     
-    # if sentiment_values == 'error':
-    #     response = {'status':'failure','message':'problem with 3rd party api'}
-    #     return response
+    if sentiment_values == 'error':
+        response = {'status':'failure','message':'problem with 3rd party api'}
+        return response
     
-    # df['Sentiment'] = sentiment_values
+    df['Sentiment'] = sentiment_values
     today_data = df.iloc[-5:-1][indicators]
     response['close_week'] = np.asarray(df.iloc[-8:-1]['Close'],np.float32).reshape(7).tolist()
     response['open'] = str(round(df.iloc[-1]['Open'],2))
