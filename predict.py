@@ -59,7 +59,7 @@ import joblib
 def predict(ticker):
     response = {'status':'success'}
     indicators = ['High','Low','Open','Volume','Adj Close','H-L','O-C','5MA',
-              '10MA','20MA','7SD','EMA8','EMA21','EMA34','EMA55','RSI_14']
+              '10MA','20MA','7SD','EMA8','EMA21','EMA34','EMA55','RSI_14','Sentiment']
     
     end_date = datetime.today().strftime('%Y-%m-%d')
     start_date = (datetime.today() - relativedelta(months=+4)).strftime('%Y-%m-%d')
@@ -130,7 +130,9 @@ def predict(ticker):
     model.compile(loss='mean_squared_error', optimizer='adam')
 
     # Fitting the ANN to the Training set
-    history = model.fit(X_train, y_train ,batch_size = 10, validation_data = (X_test, y_test), epochs = 6, verbose=1)
+    history = model.fit(X_train, y_train ,batch_size = 10, validation_data = (X_test, y_test), epochs = 15, verbose=1)
+
+    time.sleep(15)
 
     scaled_data = scaler_x.transform(today_data)
     scaled_data = pca.fit_transform(scaled_data)
