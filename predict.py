@@ -90,7 +90,7 @@ def predict(ticker):
     # df['Sentiment'] = sentiment_values
     today_data = df.iloc[-5:-1][indicators]
     response['close_week'] = np.asarray(df.iloc[-8:-1]['Close'],np.float32).reshape(7).tolist()
-    response['open'] = df.iloc[-1]['Open']
+    response['open'] = str(round(df.iloc[-1]['Open'],2))
     df.dropna(inplace=True)
     X = np.asarray(df[indicators], np.float32)
     Y = np.asarray(df['Close'], np.float32)
@@ -140,7 +140,7 @@ def predict(ticker):
     
     pred = model.predict(scaled_data)
     pred = scaler_y.inverse_transform(pred.reshape(-1,1))
-    response['predicted_close'] = pred[-1].tolist()[0]
+    response['predicted_close'] = str(round(pred[-1].tolist()[0],2))
     
     
     return response
