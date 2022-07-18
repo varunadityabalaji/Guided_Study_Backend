@@ -59,7 +59,7 @@ import joblib
 def predict(ticker):
     response = {'status':'success'}
     indicators = ['High','Low','Open','Volume','Adj Close','H-L','O-C','5MA',
-              '10MA','20MA','7SD','EMA8','EMA21','EMA34','EMA55','RSI_14','Sentiment']
+              '10MA','20MA','7SD','EMA8','EMA21','EMA34','EMA55','RSI_14']
     
     end_date = datetime.today().strftime('%Y-%m-%d')
     start_date = (datetime.today() - relativedelta(months=+4)).strftime('%Y-%m-%d')
