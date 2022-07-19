@@ -125,7 +125,7 @@ def predict(ticker):
 
     scaled_data = scaler_x.transform(today_data)
     scaled_data = pca.fit_transform(scaled_data)
-    scaled_data = np.expand_dims(scaled_data, axis=1)
+    # scaled_data = np.expand_dims(scaled_data, axis=1)
     
     pred = model.predict(scaled_data)
     pred = scaler_y.inverse_transform(pred.reshape(-1,1))
