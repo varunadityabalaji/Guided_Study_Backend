@@ -123,6 +123,8 @@ def predict(ticker):
     # Train the model on training data
     model.fit(X_train, y_train)
 
+    time.sleep(15)
+
     scaled_data = scaler_x.transform(today_data)
     scaled_data = pca.fit_transform(scaled_data)
     # scaled_data = np.expand_dims(scaled_data, axis=1)
