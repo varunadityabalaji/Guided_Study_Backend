@@ -80,13 +80,13 @@ def predict(ticker):
     df.ta.rsi(close='Close', length=14, append=True)
     df['Close'] = df['Close'].shift(-1)
     df = df.reset_index()
-    sentiment_values =get_sentiment_data(ticker,df)
+    # sentiment_values =get_sentiment_data(ticker,df)
     
-    if sentiment_values == 'error':
-        response = {'status':'failure','message':'problem with 3rd party api'}
-        return response
+    # if sentiment_values == 'error':
+    #     response = {'status':'failure','message':'problem with 3rd party api'}
+    #     return response
     
-    df['Sentiment'] = sentiment_values
+    # df['Sentiment'] = sentiment_values
     today_data = df.iloc[-5:-1][indicators]
     response['close_week'] = np.asarray(df.iloc[-8:-1]['Close'],np.float32).reshape(7).tolist()
     response['open'] = str(round(df.iloc[-1]['Open'],2))
